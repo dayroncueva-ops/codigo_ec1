@@ -117,6 +117,24 @@ public:
         return true;
     }
 
+    // Elimina el nodo apuntado directamente en O(1) amortizado.
+    // Truco: como NO tenemos puntero al anterior, copiamos el dato
+    // del siguiente nodo dentro de 'nodo' y borramos el siguiente
+    // (nodo "hereda" la identidad logica del que sigue).
+    // Limitacion: si 'nodo' es la cola (no tiene siguiente) no aplica
+    // el truco y caemos a eliminarFinal(), que es O(n) en lista simple.
+    bool eliminarNodo(Nodo<T>* nodo) {
+        if (nodo == nullptr || tam == 0) return false;
+        if (nodo == cola) return eliminarFinal();
+        Nodo<T>* siguiente = nodo->sig;
+        nodo->dato = siguiente->dato;
+        nodo->sig = siguiente->sig;
+        if (siguiente == cola) cola = nodo;
+        delete siguiente;
+        tam--;
+        return true;
+    }
+
     void vaciar() {
         while (!estaVacia()) eliminarInicio();
     }
