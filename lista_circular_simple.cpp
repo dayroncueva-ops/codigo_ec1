@@ -121,6 +121,27 @@ public:
         return false;
     }
 
+    // Elimina el nodo apuntado directamente en O(1) amortizado.
+    // Truco: copiamos el dato del siguiente dentro de 'nodo' y borramos
+    // el siguiente. Al ser circular, 'nodo->sig' SIEMPRE existe
+    // (si tam==1, nodo->sig == nodo, caso especial abajo).
+    bool eliminarNodo(NodoCS<T>* nodo) {
+        if (nodo == nullptr || tam == 0) return false;
+        if (tam == 1) {
+            delete cola;
+            cola = nullptr;
+            tam = 0;
+            return true;
+        }
+        NodoCS<T>* siguiente = nodo->sig;
+        nodo->dato = siguiente->dato;
+        nodo->sig = siguiente->sig;
+        if (siguiente == cola) cola = nodo;
+        delete siguiente;
+        tam--;
+        return true;
+    }
+
     void vaciar() {
         while (!estaVacia()) eliminarInicio();
     }
