@@ -135,6 +135,24 @@ public:
         return false;
     }
 
+    // Elimina el nodo apuntado directamente en O(1) REAL
+    // (tenemos ->ant y ->sig, no hace falta ningun truco).
+    bool eliminarNodo(NodoCD<T>* nodo) {
+        if (nodo == nullptr || tam == 0) return false;
+        if (tam == 1) {
+            delete cabeza;
+            cabeza = nullptr;
+            tam = 0;
+            return true;
+        }
+        if (nodo == cabeza) cabeza = nodo->sig;
+        nodo->ant->sig = nodo->sig;
+        nodo->sig->ant = nodo->ant;
+        delete nodo;
+        tam--;
+        return true;
+    }
+
     void vaciar() {
         while (!estaVacia()) eliminarInicio();
     }
